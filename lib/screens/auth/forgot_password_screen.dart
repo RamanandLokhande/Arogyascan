@@ -1,60 +1,77 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../providers/patient_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_text_styles.dart';
 import '../../widgets/common/custom_button.dart';
 import '../../widgets/common/custom_text_field.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
+  bool _isLoading = false;
 
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
-  Future<void> _submit() async {
+  Future<void> _sendResetEmail() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final provider = context.read<PatientProvider>();
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
-      await provider.login(
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-      );
+      // Simulate API call
+      await Future.delayed(const Duration(seconds: 2));
 
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/home');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password reset link sent to your email'),
+        ),
+      );
+
+      // Navigate back after a delay
+      await Future.delayed(const Duration(seconds: 2));
+      if (!mounted) return;
+      Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-        ),
+        SnackBar(content: Text('Error: $e')),
       );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<PatientProvider>();
-
     return Scaffold(
-      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        backgroundColor: AppColors.primary,
+        title: Text(
+          'Reset Password',
+          style: AppTextStyles.heading3.copyWith(
+            color: AppColors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -72,13 +89,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Icon(
-                      Icons.local_hospital,
+                      Icons.lock_reset,
                       color: AppColors.white,
                       size: 40,
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Welcome Back',
+                      'Reset Your Password',
                       style: AppTextStyles.heading2.copyWith(
                         color: AppColors.white,
                         fontWeight: FontWeight.w700,
@@ -86,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Please enter your credentials to proceed.',
+                      'Enter your email address and we\'ll send you a link to reset your password.',
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.white.withAlpha(230),
                       ),
@@ -94,11 +111,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               Form(
                 key: _formKey,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      'Email Address',
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
                     CustomTextField(
                       label: 'Email',
                       controller: _emailController,
@@ -117,70 +143,28 @@ class _LoginScreenState extends State<LoginScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 16),
-                    CustomTextField(
-                      label: 'Password',
-                      controller: _passwordController,
-                      hint: 'password123',
-                      obscureText: _obscurePassword,
-                      prefixIcon: Icons.lock,
-                      suffixIcon: _obscurePassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      onSuffixTap: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Password is required';
-                        }
-                        if (value.trim().length < 6) {
-                          return 'Password must be at least 6 characters';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/forgot-password');
-                        },
-                        child: Text(
-                          'Forgot Password?',
-                          style: AppTextStyles.bodySmall.copyWith(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 32),
                     CustomButton(
-                      label: 'Log In',
-                      isLoading: provider.isLoading,
-                      onPressed: _submit,
+                      label: 'Send Reset Link',
+                      onPressed: _sendResetEmail,
+                      isLoading: _isLoading,
                     ),
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Don't have an account?",
+                          "Remember your password?",
                           style: AppTextStyles.bodySmall.copyWith(
                             color: AppColors.textSecondary,
                           ),
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, '/register');
+                            Navigator.pop(context);
                           },
                           child: Text(
-                            'Register',
+                            'Go Back',
                             style: AppTextStyles.bodySmall.copyWith(
                               color: AppColors.primary,
                               fontWeight: FontWeight.w600,

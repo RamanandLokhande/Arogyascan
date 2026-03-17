@@ -15,10 +15,15 @@ class EmergencyInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: AppColors.error.withAlpha(20),
+      color: AppColors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: AppColors.divider.withAlpha(140),
+          width: 1,
+        ),
       ),
+      elevation: 1,
       margin: const EdgeInsets.symmetric(vertical: 12),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -39,7 +44,7 @@ class EmergencyInfoCard extends StatelessWidget {
                 Text(
                   'Blood Group',
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: AppColors.textSecondary,
+                    color: const Color.fromARGB(255, 0, 0, 0),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -67,7 +72,7 @@ class EmergencyInfoCard extends StatelessWidget {
               Text(
                 'Allergies',
                 style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.textSecondary,
+                  color: const Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
               const SizedBox(height: 8),
@@ -82,7 +87,7 @@ class EmergencyInfoCard extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.error.withAlpha(51),
+                          color: const Color.fromARGB(255, 90, 89, 89).withAlpha(51),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
@@ -101,7 +106,7 @@ class EmergencyInfoCard extends StatelessWidget {
               Text(
                 'Chronic Conditions',
                 style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.textSecondary,
+                  color: const Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
               const SizedBox(height: 8),
@@ -116,13 +121,13 @@ class EmergencyInfoCard extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.warning.withAlpha(51),
+                          color: const Color.fromARGB(255, 187, 142, 73).withAlpha(51),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           e,
                           style: AppTextStyles.bodySmall.copyWith(
-                            color: AppColors.warning,
+                            color: const Color.fromARGB(255, 0, 0, 0),
                           ),
                         ),
                       ),
@@ -134,7 +139,7 @@ class EmergencyInfoCard extends StatelessWidget {
             Text(
               'Emergency Contact',
               style: AppTextStyles.bodySmall.copyWith(
-                color: AppColors.textSecondary,
+                color: const Color.fromARGB(255, 0, 0, 0),
               ),
             ),
             const SizedBox(height: 8),

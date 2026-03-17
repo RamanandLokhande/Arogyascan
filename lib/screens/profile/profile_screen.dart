@@ -33,7 +33,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/edit-profile');
+            },
             icon: const Icon(Icons.edit),
           ),
         ],
@@ -172,22 +174,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildSettingTile(
               icon: Icons.notifications,
               title: 'Notification Settings',
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, '/notification-settings');
+              },
             ),
             _buildSettingTile(
               icon: Icons.lock,
               title: 'Privacy & Security',
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, '/privacy-security');
+              },
             ),
             _buildSettingTile(
               icon: Icons.help_outline,
               title: 'Help & Support',
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, '/help-support');
+              },
             ),
             _buildSettingTile(
               icon: Icons.info_outline,
               title: 'About ArogyaScan',
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, '/about');
+              },
             ),
 
             const SizedBox(height: 24),

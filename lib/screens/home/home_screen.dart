@@ -31,6 +31,16 @@ class _HomeScreenState extends State<HomeScreen> {
       _HomeContent(
         patientProvider: patientProvider,
         notificationProvider: notificationProvider,
+        onNavigateToRecords: () {
+          setState(() {
+            _currentIndex = 1;
+          });
+        },
+        onNavigateToProfile: () {
+          setState(() {
+            _currentIndex = 3;
+          });
+        },
       ),
       const MedicalRecordsScreen(),
       const QrCardScreen(),
@@ -78,10 +88,14 @@ class _HomeScreenState extends State<HomeScreen> {
 class _HomeContent extends StatelessWidget {
   final PatientProvider patientProvider;
   final NotificationProvider notificationProvider;
+  final VoidCallback onNavigateToRecords;
+  final VoidCallback onNavigateToProfile;
 
   const _HomeContent({
     required this.patientProvider,
     required this.notificationProvider,
+    required this.onNavigateToRecords,
+    required this.onNavigateToProfile,
   });
 
   @override
@@ -241,9 +255,7 @@ class _HomeContent extends StatelessWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/medical-records');
-                      },
+                      onPressed: onNavigateToRecords,
                       child: Text(
                         'View All',
                         style: AppTextStyles.bodySmall.copyWith(
@@ -303,9 +315,7 @@ class _HomeContent extends StatelessWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/medical-records');
-                      },
+                      onPressed: onNavigateToRecords,
                       child: Text(
                         'View All',
                         style: AppTextStyles.bodySmall.copyWith(
@@ -363,9 +373,7 @@ class _HomeContent extends StatelessWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/profile');
-                        },
+                        onPressed: onNavigateToProfile,
                         child: Text(
                           'View',
                           style: AppTextStyles.bodySmall.copyWith(
